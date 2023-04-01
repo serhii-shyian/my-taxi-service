@@ -224,6 +224,16 @@ public class CarDaoImpl implements CarDao {
     }
 
     private Car parseCarFromResultSet(ResultSet resultSet) throws SQLException {
+        Long carId = resultSet.getObject("id", Long.class);
+        String model = resultSet.getString("model");
+        Car car = new Car();
+        car.setId(carId);
+        car.setModel(model);
+        car.setManufacturer(parseManufacturerFromResultSet(resultSet));
+        return car;
+    }
+
+    private Manufacturer parseManufacturerFromResultSet(ResultSet resultSet) throws SQLException {
         Long manufacturerId = resultSet.getObject("manufacturer_id", Long.class);
         String manufacturerName = resultSet.getString("manufacturer_name");
         String manufacturerCountry = resultSet.getString("manufacturer_country");
@@ -231,12 +241,6 @@ public class CarDaoImpl implements CarDao {
         manufacturer.setId(manufacturerId);
         manufacturer.setName(manufacturerName);
         manufacturer.setCountry(manufacturerCountry);
-        Long carId = resultSet.getObject("id", Long.class);
-        String model = resultSet.getString("model");
-        Car car = new Car();
-        car.setId(carId);
-        car.setModel(model);
-        car.setManufacturer(manufacturer);
-        return car;
+        return manufacturer;
     }
 }
